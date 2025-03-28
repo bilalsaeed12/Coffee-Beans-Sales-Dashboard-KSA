@@ -1,0 +1,43 @@
+M-Code to resolve the date format issue as inital dates in dataset were in mm/dd/yyyy format and power bi was considering dd as month so we have to replace dd with mm.
+
+let
+    parts = Text.Split([Date], "/"),  // Split the string by "/"
+    firstPart = parts{0},  // Extract the first part
+    secondPart = parts{1}, // Extract the second part
+    lastPart = parts{2},   // Extract the third part
+    result = secondPart & "/" & firstPart & "/" & lastPart  // Replace first part with second part
+in
+    result
+
+
+
+Dax Code for categorising customers based on number of orders. 
+Customer_Category = 
+VAR OrderCount = 
+    CALCULATE(
+        COUNT(CoffeeSalesFact[Customer_ID]), 
+        ALLEXCEPT(CoffeeSalesFact, CoffeeSalesFact[Customer_ID])
+    )
+
+RETURN
+    SWITCH(
+        TRUE(),
+        OrderCount <= 4, "Casual Customer",
+        OrderCount <= 9, "Regular Customer",
+        "Loyal Customer"
+    )
+
+Number Of Customers = DISTINCTCOUNT(CoffeeSalesFact[Customer_ID])
+
+
+Total Discount Given = SUM(CoffeeSalesFact[Discount_Amount])
+
+Total Orders = COUNT(CoffeeSalesFact[Customer_ID])
+
+Total Revenue = SUM(CoffeeSalesFact[Final Sales])
+
+Total Units Sold = SUM(CoffeeSalesFact[Quantity])
+
+
+
+
